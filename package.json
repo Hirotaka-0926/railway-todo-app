@@ -13,16 +13,25 @@
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^ 7.1.1",
+    "sass": "^1.83.4",
     "web-vitals": "^4.2.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
     "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint:prettier": "prettier --check .",
+    "lint:eslint": "eslint src",
+    "scripts": "npm run lint:prettier && npm run lint:eslint"
   },
   "eslintConfig": {
     "extends": [
