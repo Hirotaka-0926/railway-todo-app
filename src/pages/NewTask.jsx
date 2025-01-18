@@ -24,7 +24,7 @@ export const NewTask = () => {
       title: title,
       detail: detail,
       done: false,
-      limit: limit ? limit + ":00+09:00" : null,
+      limit: limit ? new Date(limit).toISOString() : null,
     };
     console.log(data.limit);
     axios

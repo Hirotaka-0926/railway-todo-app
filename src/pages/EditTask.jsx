@@ -15,6 +15,7 @@ export const EditTask = () => {
   const [isDone, setIsDone] = useState();
   const [errorMessage, setErrorMessage] = useState("");
   const [limit, setLimit] = useState("");
+  const [defaultLimit, setDefaultLimit] = useState("");
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
   const handleIsDoneChange = (e) => setIsDone(e.target.value === "done");
@@ -25,7 +26,7 @@ export const EditTask = () => {
       title: title,
       detail: detail,
       done: isDone,
-      limit: limit ? limit + ":00+09:00" : null,
+      limit: limits ? new Date(limits).toISOString() : null,
     };
 
     axios
@@ -77,6 +78,25 @@ export const EditTask = () => {
       });
   }, []);
 
+  const convetDateToIso = () => {
+    const date = new Date(limit);
+    console.log(date.getMonth());
+    const display =
+      date.getFullYear() +
+      "-" +
+      ("0" + String(date.getMonth() + 1)).slice(-2) +
+      "-" +
+      ("0" + String(date.getDate())).slice(-2) +
+      "T" +
+      ("0" + String(date.getHours())).slice(-2) +
+      ":" +
+      ("0" + String(date.getMinutes())).slice(-2);
+
+    setDefaultLimit(display);
+  };
+  useEffect(() => {
+    convetDateToIso();
+  }, [limit]);
   return (
     <div>
       <Header />
@@ -108,7 +128,7 @@ export const EditTask = () => {
           <input
             type="datetime-local"
             onChange={handleLimitChange}
-            defaultValue={limit}
+            defaultValue={defaultLimit}
           />
           <div>
             <input

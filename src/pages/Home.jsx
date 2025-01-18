@@ -152,13 +152,30 @@ const Tasks = (props) => {
   const { tasks, selectListId, isDoneDisplay } = props;
   const formatLimit = (limit) => {
     if (limit === null) return "時刻指定はありません";
+    console.log("before" + limit);
     const date = new Date(limit);
+    console.log("after" + date);
+    date.setHours(date.getHours());
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
-    const day = date.getDay();
+    const day = date.getDate();
+
     const hour = date.getHours();
     const minute = date.getMinutes();
     const display = `${year}年${month}月${day}日 ${hour}時${minute}分`;
+    return display;
+  };
+
+  const calcLimit = (limit) => {
+    const defaultLimit = new Date(limit);
+    const now = new Date();
+    const diff = defaultLimit - now;
+    if (diff < 0) return "期限切れ";
+    const limitSecond = Math.floor(diff / 1000);
+    const day = Math.floor(limitSecond / (60 * 60 * 24));
+    const hours = Math.floor((limitSecond % (60 * 60 * 24)) / (60 * 60));
+    const minute = Math.floor((limitSecond % (60 * 60)) / 60);
+    const display = `${day}日${hours}時間${minute}分`;
     return display;
   };
   if (tasks === null) return <></>;
@@ -178,7 +195,7 @@ const Tasks = (props) => {
               >
                 {task.title}
                 <br />
-                {formatLimit(task.limit)}
+                {task.limit}
                 <br />
                 {task.done ? "完了" : "未完了"}
               </Link>
@@ -203,6 +220,8 @@ const Tasks = (props) => {
               {task.title}
               <br />
               {formatLimit(task.limit)}
+              <br />
+              {"残り時間" + calcLimit(task.limit)}
               <br />
               {task.done ? "完了" : "未完了"}
             </Link>
