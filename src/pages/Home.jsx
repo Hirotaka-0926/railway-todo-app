@@ -12,6 +12,7 @@ export const Home = () => {
   const [selectListId, setSelectListId] = useState();
   const [tasks, setTasks] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [focusIndex, setFocusIndex] = useState(0);
   const [cookies] = useCookies();
   const handleIsDoneDisplayChange = (e) => setIsDoneDisplay(e.target.value);
   useEffect(() => {
@@ -33,6 +34,7 @@ export const Home = () => {
     const listId = lists[0]?.id;
     if (typeof listId !== "undefined") {
       setSelectListId(listId);
+
       axios
         .get(`${url}/lists/${listId}/tasks`, {
           headers: {
@@ -47,6 +49,24 @@ export const Home = () => {
         });
     }
   }, [lists]);
+
+  const handleKeyDown = (e, index) => {
+    console.log(e.key);
+    console.log(index);
+    if (e.key === "d") {
+      setFocusIndex((prevIndex) =>
+        lists.length - 1 == prevIndex ? 0 : prevIndex + 1
+      );
+      handleSelectList(lists[focusIndex].id);
+      console.log("right");
+    } else if (e.key === "a") {
+      console.log("left");
+      setFocusIndex((prevIndex) =>
+        prevIndex == 0 ? lists.length - 1 : prevIndex - 1
+      );
+      handleSelectList(lists[focusIndex].id);
+    }
+  };
 
   const handleSelectList = (id) => {
     setSelectListId(id);
@@ -82,14 +102,19 @@ export const Home = () => {
               </p>
             </div>
           </div>
-          <ul className="list-tab">
+          <ul className="list-tab" role="tablist">
             {lists.map((list, key) => {
               const isActive = list.id === selectListId;
+
               return (
                 <li
                   key={key}
                   className={`list-tab-item ${isActive ? "active" : ""}`}
                   onClick={() => handleSelectList(list.id)}
+                  role="tab"
+                  aria-selected={isActive}
+                  tabIndex={isActive ? 0 : -1}
+                  onKeyDown={(e) => handleKeyDown(e, key)}
                 >
                   {list.title}
                 </li>
@@ -125,6 +150,17 @@ export const Home = () => {
 // 表示するタスク
 const Tasks = (props) => {
   const { tasks, selectListId, isDoneDisplay } = props;
+  const formatLimit = (limit) => {
+    if (limit === null) return "時刻指定はありません";
+    const date = new Date(limit);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDay();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const display = `${year}年${month}月${day}日 ${hour}時${minute}分`;
+    return display;
+  };
   if (tasks === null) return <></>;
 
   if (isDoneDisplay == "done") {
@@ -142,6 +178,8 @@ const Tasks = (props) => {
               >
                 {task.title}
                 <br />
+                {formatLimit(task.limit)}
+                <br />
                 {task.done ? "完了" : "未完了"}
               </Link>
             </li>
@@ -157,12 +195,14 @@ const Tasks = (props) => {
           return task.done === false;
         })
         .map((task, key) => (
-          <li key={key} className="task-item">
+          <li key={key} className="task-item" aria-label="task-item">
             <Link
               to={`/lists/${selectListId}/tasks/${task.id}`}
               className="task-item-link"
             >
               {task.title}
+              <br />
+              {formatLimit(task.limit)}
               <br />
               {task.done ? "完了" : "未完了"}
             </Link>

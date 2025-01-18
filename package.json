@@ -34,9 +34,9 @@
     "scripts": "npm run lint:prettier && npm run lint:eslint"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
+    "extends": [],
+    "plugins": [
+      "react"
     ]
   },
   "browserslist": {

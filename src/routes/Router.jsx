@@ -31,7 +31,7 @@ export const Router = () => {
             <Route exact path="/lists/:listId/edit" element={<EditList />} />
           </>
         ) : (
-          <Navigate to="/signin" />
+          <Route path="*" element={<Navigate to="/signin" />} />
         )}
         <Route element={<NotFound />} />
       </Routes>
