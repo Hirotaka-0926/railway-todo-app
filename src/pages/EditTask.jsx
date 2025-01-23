@@ -14,7 +14,7 @@ export const EditTask = () => {
   const [detail, setDetail] = useState("");
   const [isDone, setIsDone] = useState();
   const [errorMessage, setErrorMessage] = useState("");
-  const [limit, setLimit] = useState("");
+  const [limits, setLimit] = useState("");
   const [defaultLimit, setDefaultLimit] = useState("");
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
@@ -79,7 +79,7 @@ export const EditTask = () => {
   }, []);
 
   const convetDateToIso = () => {
-    const date = new Date(limit);
+    const date = new Date(limits);
     console.log(date.getMonth());
     const display =
       date.getFullYear() +
@@ -96,7 +96,7 @@ export const EditTask = () => {
   };
   useEffect(() => {
     convetDateToIso();
-  }, [limit]);
+  }, [limits]);
   return (
     <div>
       <Header />

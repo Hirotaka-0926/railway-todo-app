@@ -54,22 +54,25 @@ export const Home = () => {
     console.log(e.key);
     console.log(index);
     if (e.key === "d") {
-      setFocusIndex((prevIndex) =>
-        lists.length - 1 == prevIndex ? 0 : prevIndex + 1
-      );
-      handleSelectList(lists[focusIndex].id);
+      const prevIndex = focusIndex;
+      const focusI = lists.length - 1 == prevIndex ? 0 : prevIndex + 1;
+      setFocusIndex(focusI);
+      handleSelectList(lists[focusI].id);
       console.log("right");
     } else if (e.key === "a") {
       console.log("left");
-      setFocusIndex((prevIndex) =>
-        prevIndex == 0 ? lists.length - 1 : prevIndex - 1
-      );
-      handleSelectList(lists[focusIndex].id);
+      const prevIndex = focusIndex;
+      const focusI = prevIndex == 0 ? lists.length - 1 : prevIndex - 1;
+      setFocusIndex(focusI);
+      handleSelectList(lists[focusI].id);
     }
   };
 
-  const handleSelectList = (id) => {
+  const handleSelectList = (id, index) => {
     setSelectListId(id);
+    if (index) {
+      setFocusIndex(index);
+    }
     axios
       .get(`${url}/lists/${id}/tasks`, {
         headers: {
@@ -110,7 +113,7 @@ export const Home = () => {
                 <li
                   key={key}
                   className={`list-tab-item ${isActive ? "active" : ""}`}
-                  onClick={() => handleSelectList(list.id)}
+                  onClick={() => handleSelectList(list.id, key)}
                   role="tab"
                   aria-selected={isActive}
                   tabIndex={isActive ? 0 : -1}
@@ -182,7 +185,7 @@ const Tasks = (props) => {
 
   if (isDoneDisplay == "done") {
     return (
-      <ul>
+      <ul role="tabpanel">
         {tasks
           .filter((task) => {
             return task.done === true;

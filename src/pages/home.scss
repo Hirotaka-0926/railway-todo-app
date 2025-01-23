@@ -81,34 +81,14 @@
   width: auto;
 }
 
-@media screen and (max-width: (768px)) {
+@media screen and (max-width: 768px) and (min-width: 321px) {
   .list-tab {
     display: block;
   }
 }
 
 @media screen and (max-width: (320px)) {
-  .taskList {
-    height: auto;
-    width: auto;
-  }
   .list-tab {
     display: block;
-  }
-  .tasks-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .list-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .list-menu {
-    display: flex;
-    flex-direction: column;
-  }
-  .display-select {
-    display: flex;
-    flex-direction: column;
   }
 }
